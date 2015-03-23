@@ -1,4 +1,4 @@
-package es.upm.oeg.epnoi.otdchfs;
+package es.upm.oeg.epnoi.otdchfs.features;
 
 
 import org.apache.spark.api.java.JavaRDD;
@@ -6,23 +6,23 @@ import org.apache.spark.mllib.feature.HashingTF;
 import org.apache.spark.mllib.feature.IDF;
 import org.apache.spark.mllib.feature.IDFModel;
 import org.apache.spark.mllib.linalg.Vector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class HFSM implements Serializable{
+/**
+ * Term-Frequency and Inverse Document-Frequency
+ */
+public class TFIDF implements FeatureExtractor{
 
-    private static Logger LOG = LoggerFactory.getLogger(HFSM.class);
     private final int dimension;
 
-    public HFSM(int dimension){
-        // Recommended between 2**18 and 2**20
+    public TFIDF(int dimension){
         this.dimension = dimension;
     }
 
-    public JavaRDD<Vector> featureExtraction(JavaRDD<List<String>> terms){
+    @Override
+    public JavaRDD<Vector> characterize(JavaRDD<List<String>> terms){
 
         // Term-Frequency Feature Extraction
         HashingTF tf = new HashingTF(dimension);

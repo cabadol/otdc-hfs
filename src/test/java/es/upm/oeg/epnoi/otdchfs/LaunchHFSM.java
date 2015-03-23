@@ -16,15 +16,18 @@ public class LaunchHFSM {
     private static final Logger LOG = LoggerFactory.getLogger(LaunchHFSM.class);
 
     @Test
-    public void hfsmCluster(){
+    public void classify(){
 
         SparkConf conf = new SparkConf().setMaster("local").setAppName("My HFSM Clustering App");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         JavaPairRDD<String, String> input = sc.wholeTextFiles("src/test/resources/corpus");
 
+
+        double accurateThreshold = 5.0;
+        int maxIterations = 10;
         TDCHFS tdchfs = new TDCHFS();
-        KMeansModel model = tdchfs.cluster(input);
+        KMeansModel model = tdchfs.cluster(input, accurateThreshold, maxIterations);
 
         /**************************************************
          * Show details
@@ -37,7 +40,7 @@ public class LaunchHFSM {
         }
 
         // Classification
-        JavaRDD<Vector> vectors = tdchfs.getHFSM().featureExtraction(tdchfs.getContent(input));
+        JavaRDD<Vector> vectors = tdchfs.getTFIDF().characterize(tdchfs.getContent(input));
         for (Vector vector: vectors.collect() ){
             LOG.debug("Vector: " + vector + " classified in:  " + model.predict(vector));
         }
