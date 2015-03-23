@@ -76,6 +76,12 @@
             <artifactId>spark-mllib_2.10</artifactId>
             <version>${spark.version}</version>
         </dependency>
+        <!-- JUnit Test Libraries -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
