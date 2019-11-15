@@ -23,24 +23,25 @@ public class TDCHFS implements Serializable{
 
     private static final Logger LOG = LoggerFactory.getLogger(TDCHFS.class);
 
-    private static final Integer NUM_FEATURES   = 11;
-    private static final Integer MAX_ITERATIONS = 20;
-    private static final Integer NUM_CLUSTERS   = 2;
-
     private final HFSM hfsm;
     private final KMeansWrapper kmeans;
     private final TFIDF tfidf;
+    private final int numClusters;
+    private final int maxIterations;
 
-    public TDCHFS(){
+    public TDCHFS(int numFeatures, int numClusters, int maxIterations){
+
+        this.numClusters    = numClusters;
+        this.maxIterations  = maxIterations;
 
         // Term-Frequency and Inverse Document-Frequency
-        this.tfidf = new TFIDF(NUM_FEATURES);
+        this.tfidf = new TFIDF(numFeatures);
 
         // Hybrid Feature Selection (HFS) Algorithm
         this.hfsm = new HFSM();
 
         // KMeans Algorithm
-        this.kmeans = new KMeansWrapper(MAX_ITERATIONS);
+        this.kmeans = new KMeansWrapper(maxIterations);
     }
 
 
@@ -53,17 +54,17 @@ public class TDCHFS implements Serializable{
         });
     }
 
-    public KMeansModel cluster(JavaPairRDD<String, String> corpus, double minAccurate, int maxIterations){
+    public KMeansModel cluster(JavaPairRDD<String, String> corpus, double minAccurate){
 
         // Get content of each document
         JavaRDD<List<String>> terms = getContent(corpus);
 
-        // Initial weights by Term-Frequency and Inverse Document-Frequency
+        // Initial weights by Term-Frequency and Inverse Document-Frequency (One vector for each document)
         JavaRDD<Vector> vectors = this.tfidf.characterize(terms);
 
         // Initial Step
         // 1. Perfom the k-means Algorithm on the dataset to get initial clusters and centroids
-        KMeansModel model = this.kmeans.train(vectors,NUM_CLUSTERS);
+        KMeansModel model = this.kmeans.train(vectors,numClusters);
 
         // Compute the sum of squared errors
         double cost = model.computeCost(vectors.rdd());
@@ -74,6 +75,8 @@ public class TDCHFS implements Serializable{
             // 2. Perfom the HFSM feature selection method on the dataset using the current clusters and centroids.
             // No change is made for the relevant features, however the weight of the unselected terms is reduced by
             // a predetermined factor f in the range of [0,1].
+
+
 
             // 3. Recalculate the k centroids in the new feature space.
 

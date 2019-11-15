@@ -6,6 +6,8 @@ import org.apache.spark.mllib.feature.HashingTF;
 import org.apache.spark.mllib.feature.IDF;
 import org.apache.spark.mllib.feature.IDFModel;
 import org.apache.spark.mllib.linalg.Vector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
  * Term-Frequency and Inverse Document-Frequency
  */
 public class TFIDF implements FeatureExtractor{
+
+    private static final Logger LOG = LoggerFactory.getLogger(TFIDF.class);
 
     private final int dimension;
 

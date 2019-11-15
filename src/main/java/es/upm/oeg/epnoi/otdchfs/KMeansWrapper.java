@@ -13,10 +13,11 @@ import java.io.Serializable;
 public class KMeansWrapper implements Serializable{
 
     private static final Logger LOG = LoggerFactory.getLogger(KMeansWrapper.class);
+
     private final int iterations;
 
-    public KMeansWrapper(int iterations){
-        this.iterations = iterations;
+    public KMeansWrapper(int maxIterations){
+        this.iterations     = maxIterations;
     }
 
     public KMeansModel train(JavaRDD<Vector> vectors, int numClusters){

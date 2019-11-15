@@ -3,6 +3,7 @@ package es.upm.oeg.epnoi.otdchfs.features;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.mllib.stat.Statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,9 @@ public class HFSM implements FeatureExtractor{
 
     @Override
     public JavaRDD<Vector> characterize(JavaRDD<List<String>> terms) {
+
         return null;
+
+
     }
 }
